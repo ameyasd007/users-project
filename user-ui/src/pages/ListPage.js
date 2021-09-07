@@ -1,10 +1,10 @@
 import React from "react";
-import UserGrid from "../components/UserGrid";
+import UserTable from "../components/UserTable";
 
 export default function ListPage() {
   return (
     <div>
-      <UserGrid></UserGrid>
+      <UserTable></UserTable>
     </div>
   );
 }

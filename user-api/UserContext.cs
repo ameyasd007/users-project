@@ -19,7 +19,8 @@ namespace user_api
                 Password = "Password",
                 DateOfBirth = DateTime.Now,
                 UserName = "TestUser1",
-                Gender = "Male"
+                Gender = "Male",
+                Status = false
             };
             modelBuilder.Entity<User>().HasData(user);
         }

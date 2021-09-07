@@ -26,5 +26,7 @@ namespace user_api
 
         [Required]
         public string Gender { get; set; }
+
+        public bool Status { get; set; }
     }
 }
