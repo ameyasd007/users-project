@@ -23,6 +23,7 @@ export default function UserTable() {
             <th>Date of birth</th>
             <th>Gender</th>
             <th>Status</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>

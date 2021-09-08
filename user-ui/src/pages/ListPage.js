@@ -3,7 +3,7 @@ import UserTable from "../components/UserTable";
 
 export default function ListPage() {
   return (
-    <div>
+    <div style={{ marginTop: "100px" }}>
       <UserTable></UserTable>
     </div>
   );

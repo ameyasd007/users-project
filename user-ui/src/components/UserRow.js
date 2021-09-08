@@ -1,13 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
+import { updateUser } from "../services/UserService";
 
-export default function UserRow({
-  fullName,
-  status,
-  gender,
-  userName,
-  dateOfBirth,
-  email,
-}) {
+export default function UserRow(props) {
+  const [status, setStatus] = useState(props.status);
   const formatDate = (date) => {
     if (date)
       return new Date(date).toLocaleString("en-US", {
@@ -19,23 +14,34 @@ export default function UserRow({
     return date;
   };
 
-  const changeStatus = (e) => {
-    console.log(e);
+  const changeStatus = async (e) => {
+    let response = await updateUser(props.id, {
+      ...props,
+      status: !status,
+    });
+
+    if (response.status === 200) {
+      let user = await response.json();
+      setStatus(user.status);
+    } else {
+      let error = await response.json();
+      console.log(error);
+    }
   };
+
   return (
     <tr>
       <td>
-        <a href={`mailto:${email}`}>{fullName}</a>
+        <a href={`mailto:${props.email}`}>{props.fullName}</a>
       </td>
-      <td>{userName}</td>
-      <td>{formatDate(dateOfBirth)}</td>
-      <td>{gender}</td>
+      <td>{props.userName}</td>
+      <td>{formatDate(props.dateOfBirth)}</td>
+      <td>{props.gender}</td>
       <td>
-        <input
-          type="checkbox"
-          defaultChecked={status}
-          onChange={changeStatus}
-        />
+        <input type="checkbox" checked={status} onChange={changeStatus} />
+      </td>
+      <td>
+        <a href={`/user?id=${props.id}`}>Edit</a>
       </td>
     </tr>
   );
