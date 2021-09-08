@@ -26,16 +26,27 @@ namespace user_api.Controllers
             return users;
         }
 
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            var user = _context.Users.Where(user => user.Id == id).FirstOrDefault();
+            if (user is null) return NotFound();
+            return Ok(user);
+        }
+
         [HttpPost]
-        public IActionResult Post(User model)
+        public IActionResult Post(User user)
         {
             if (!ModelState.IsValid)
                 return BadRequest("invalid parameters");
 
-            _context.Users.Add(model);
+            if (_context.Users.Any(u => u.UserName == user.UserName))
+                return BadRequest(new { errorMessage = "Username must be unique" });
+
+            _context.Users.Add(user);
             _context.SaveChanges();
 
-            return CreatedAtAction(nameof(Get), new { id = model.Id }, model);
+            return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
         }
 
         [HttpPut("{id}")]
@@ -46,11 +57,14 @@ namespace user_api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest("invalid parameters");
 
+            if (_context.Users.Where(u => u.Id != id).Any(u => u.UserName == user.UserName))
+                return BadRequest(new { errorMessage = "Username must be unique" });
+
             _context.Attach(user);
             _context.Entry(user).State = EntityState.Modified;
             _context.SaveChanges();
 
-            return NoContent();
+            return Ok(user);
         }
 
         [HttpDelete]
